@@ -11,18 +11,13 @@ namespace GorillaHeadpats.Behaviours
 
         private bool activated;
 
-        public void OnTriggerEnter(Collider collider)
+        public async void OnTriggerEnter(Collider collider)
         {
             if (collider.TryGetComponent(out GorillaTriggerColliderHandIndicator component) && !activated)
             {
                 activated = true;
-
-                TaskAwaiter awaiter = Pet(component.isLeftHand).GetAwaiter();
-                awaiter.OnCompleted(() =>
-                {
-                    activated = false;
-                });
-                awaiter.GetResult();
+                await Pet(component.isLeftHand);
+                activated = false;
             }
         }
 
