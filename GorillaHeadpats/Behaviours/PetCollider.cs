@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
 using GorillaHeadpats.Models;
@@ -27,13 +27,15 @@ namespace GorillaHeadpats.Behaviours
             if (!Mathf.Approximately(amplitude, 0f))
                 GorillaTagger.Instance.StartVibration(isLeftHand, amplitude, GorillaTagger.Instance.tapHapticDuration);
 
-            bool isRacoon = Plugin.UseRacoonSounds.Value;
-            Player.PlaySound(isRacoon ? EPatSound.RacoonSqueeze : EPatSound.Default, isLeftHand);
+            bool isCat = Plugin.UseCatSounds.Value;
+            Player.PlaySound(isCat ? EPatSound.CatSqueeze : EPatSound.Default, isLeftHand);
 
             await Task.Delay(125);
 
-            if (isRacoon)
-                Player.PlaySound(EPatSound.RacoonRelease, isLeftHand);
+            if (isCat)
+                Player.PlaySound(EPatSound.CatRelease, isLeftHand);
         }
     }
 }
+
+//meow
