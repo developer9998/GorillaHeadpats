@@ -1,4 +1,4 @@
-﻿using GorillaHeadpats.Models;
+using GorillaHeadpats.Models;
 using Photon.Pun;
 using UnityEngine;
 
@@ -40,10 +40,11 @@ namespace GorillaHeadpats.Behaviours
             return patSound switch
             {
                 EPatSound.Default => 159,
-                EPatSound.RacoonSqueeze => Random.Range(274, 277),
-                EPatSound.RacoonRelease => Random.Range(277, 283),
+                EPatSound.CatSqueeze => Random.Range(235, 235),
+                EPatSound.CatRelease => Random.Range(236, 236),
                 _ => throw new System.ArgumentOutOfRangeException(nameof(patSound))
             };
         }
     }
 }
+//meow
