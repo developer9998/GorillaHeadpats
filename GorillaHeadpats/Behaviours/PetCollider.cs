@@ -16,9 +16,25 @@ namespace GorillaHeadpats.Behaviours
             if (collider.TryGetComponent(out GorillaTriggerColliderHandIndicator component) && !activated)
             {
                 activated = true;
+                await PetCat(component.isLeftHand);
                 await Pet(component.isLeftHand);
                 activated = false;
             }
+        }
+
+        public async Task PetCat(bool isLeftHand)
+        {
+            float amplitude = Mathf.Clamp(Plugin.HapticAmplitude.Value, 0f, 1f);
+            if (!Mathf.Approximately(amplitude, 0f))
+                GorillaTagger.Instance.StartVibration(isLeftHand, amplitude, GorillaTagger.Instance.tapHapticDuration);
+
+            bool isCat = Plugin.UseCatSounds.Value;
+            Player.PlaySoundCat(isCat ? EPatSound.CatSqueeze : EPatSound.Default, isLeftHand);
+
+            await Task.Delay(125);
+
+            if (isCat)
+                Player.PlaySoundCat(EPatSound.CatRelease, isLeftHand);
         }
 
         public async Task Pet(bool isLeftHand)
@@ -27,15 +43,14 @@ namespace GorillaHeadpats.Behaviours
             if (!Mathf.Approximately(amplitude, 0f))
                 GorillaTagger.Instance.StartVibration(isLeftHand, amplitude, GorillaTagger.Instance.tapHapticDuration);
 
-            bool isCat = Plugin.UseCatSounds.Value;
-            Player.PlaySound(isCat ? EPatSound.CatSqueeze : EPatSound.Default, isLeftHand);
+            bool isRacoon = Plugin.UseRaccoonSounds.Value;
+            Player.PlaySoundRaccoon(isRacoon ? EPatSound.RaccoonSqueeze : EPatSound.Default, isLeftHand);
 
             await Task.Delay(125);
 
-            if (isCat)
-                Player.PlaySound(EPatSound.CatRelease, isLeftHand);
+            if (isRacoon)
+                Player.PlaySoundRaccoon(EPatSound.RaccoonRelease, isLeftHand);
         }
     }
 }
 
-//meow
