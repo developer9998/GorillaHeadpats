@@ -23,9 +23,9 @@ namespace GorillaHeadpats.Behaviours
             petObject.GetComponent<PetCollider>().Player = this;
         }
 
-        public void PlaySound(EPatSound patSound, bool isLeftHand)
+        public void PlaySoundCat(EPatSound patSound, bool isLeftHand)
         {
-            int soundIndex = GetSoundIndex(patSound);
+            int soundIndex = GetSoundIndexCat(patSound);
             float tapVolume = Mathf.Clamp(Plugin.PetVolume.Value, 0.05f, 0.5f);
 
             VRRig rig = GorillaTagger.Instance.offlineVRRig;
@@ -35,16 +35,38 @@ namespace GorillaHeadpats.Behaviours
                 myVRRig.SendRPC("RPC_PlayHandTap", RpcTarget.Others, soundIndex, isLeftHand, tapVolume);
         }
 
-        public int GetSoundIndex(EPatSound patSound)
+        public void PlaySoundRaccoon(EPatSound patSound, bool isLeftHand)
+        {
+            int soundIndex = GetSoundIndexRaccoon(patSound);
+            float tapVolume = Mathf.Clamp(Plugin.PetVolume.Value, 0.05f, 0.5f);
+
+            VRRig rig = GorillaTagger.Instance.offlineVRRig;
+            rig.PlayHandTapLocal(soundIndex, isLeftHand, tapVolume);
+
+            if (NetworkSystem.Instance.InRoom && GorillaTagger.Instance.myVRRig is var myVRRig)
+                myVRRig.SendRPC("RPC_PlayHandTap", RpcTarget.Others, soundIndex, isLeftHand, tapVolume);
+        }
+
+        public int GetSoundIndexCat(EPatSound patSound)
         {
             return patSound switch
             {
                 EPatSound.Default => 159,
-                EPatSound.CatSqueeze => Random.Range(235, 235),
-                EPatSound.CatRelease => Random.Range(236, 236),
+                EPatSound.CatSqueeze => 235,
+                EPatSound.CatRelease => 236,
                 _ => throw new System.ArgumentOutOfRangeException(nameof(patSound))
             };
         }
+
+public int GetSoundIndexRaccoon(EPatSound patSound)
+{
+    return patSound switch
+    {
+        EPatSound.Default => 159,
+        EPatSound.RaccoonSqueeze => Random.Range(274, 277),
+        EPatSound.RaccoonRelease => Random.Range(277, 283),
+        _ => throw new System.ArgumentOutOfRangeException(nameof(patSound))
+    };
+}
     }
 }
-//meow
