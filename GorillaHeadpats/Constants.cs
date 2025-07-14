@@ -6,8 +6,8 @@ namespace GorillaHeadpats
 
         public const string Name = "GorillaHeadpats";
 
-        public const string Version = "1.0.1";
+        public const string Version = "1.0.2";
     }
 }
 //meow
-//die raccoon!!!!
+//damn it, the raccoon is alive again
