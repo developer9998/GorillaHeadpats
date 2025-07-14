@@ -9,6 +9,8 @@ namespace GorillaHeadpats.Models
         Default,
         CatSqueeze,
         CatRelease,
+        RaccoonSqueeze,
+        RaccoonRelease,
     }
 }
-//meow
+//meow and raccoon i guess..
