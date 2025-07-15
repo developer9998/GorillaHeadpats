@@ -4,13 +4,6 @@ using HarmonyLib;
 
 namespace GorillaHeadpats
 {
-    public enum PetType
-    {
-        Default,
-        Raccoon,
-        Cat,
-        Sponge,
-    }
 
     [BepInPlugin(Constants.GUID, Constants.Name, Constants.Version)]
     public class Plugin : BaseUnityPlugin
@@ -18,7 +11,7 @@ namespace GorillaHeadpats
         public static ConfigEntry<float> PetVolume;
         public static ConfigEntry<float> HapticAmplitude;
 
-        public static ConfigEntry<PetType> SelectedPetType;
+        public static ConfigEntry<EPetType> SelectedPetType;
 
         public void Awake()
         {
@@ -28,7 +21,7 @@ namespace GorillaHeadpats
             HapticAmplitude = Config.Bind(Constants.Name, "Haptic Amplitude", 0.25f,
                 new ConfigDescription("The strength of the haptic made when petting", new AcceptableValueRange<float>(0f, 1f)));
 
-            SelectedPetType = Config.Bind(Constants.Name, "Pet Sound Type", PetType.Default,
+            SelectedPetType = Config.Bind(Constants.Name, "Pet Sound Type", EPetType.Default,
                 "The type of pet sound to play");
 
             Harmony.CreateAndPatchAll(typeof(Plugin).Assembly, Constants.GUID);
