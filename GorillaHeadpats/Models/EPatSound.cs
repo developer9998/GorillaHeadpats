@@ -11,6 +11,8 @@ namespace GorillaHeadpats.Models
         CatRelease,
         RaccoonSqueeze,
         RaccoonRelease,
+        SpongeSqueeze,
+        SpongeRelease,
     }
 }
 //meow and raccoon i guess..
