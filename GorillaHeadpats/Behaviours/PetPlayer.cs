@@ -1,87 +1,93 @@
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using UnityEngine;
 using GorillaHeadpats.Models;
+using Photon.Pun;
+using UnityEngine;
 
 namespace GorillaHeadpats.Behaviours
 {
-    internal class PetCollider : MonoBehaviour
+    [DisallowMultipleComponent, RequireComponent(typeof(VRRig))]
+    internal class PetPlayer : MonoBehaviour
     {
-        public PetPlayer Player;
+        public VRRig Rig => GetComponent<VRRig>();
 
-        private bool activated;
+        public GameObject petObject;
 
-        public async void OnTriggerEnter(Collider collider)
+        public void Start()
         {
-            if (collider.TryGetComponent(out GorillaTriggerColliderHandIndicator component) && !activated)
+            petObject = new GameObject("PetObject", typeof(BoxCollider), typeof(PetCollider));
+            petObject.SetLayer(UnityLayer.GorillaInteractable);
+            petObject.transform.SetParent(Rig.headMesh.transform, false);
+            BoxCollider component = petObject.GetComponent<BoxCollider>();
+            component.center = new Vector3(0.0f, 0.23f, -0.01f);
+            component.size = new Vector3(0.14f, 0.05f, 0.21f);
+            component.isTrigger = true;
+            petObject.GetComponent<PetCollider>().Player = this;
+        }
+
+        public void PlaySoundCat(EPatSound patSound, bool isLeftHand)
+        {
+            int soundIndex = GetSoundIndexCat(patSound);
+            float tapVolume = Mathf.Clamp(Plugin.PetVolume.Value, 0.05f, 0.5f);
+
+            VRRig rig = GorillaTagger.Instance.offlineVRRig;
+            rig.PlayHandTapLocal(soundIndex, isLeftHand, tapVolume);
+
+            if (NetworkSystem.Instance.InRoom && GorillaTagger.Instance.myVRRig is var myVRRig)
+                myVRRig.SendRPC("RPC_PlayHandTap", RpcTarget.Others, soundIndex, isLeftHand, tapVolume);
+        }
+
+        public void PlaySoundRaccoon(EPatSound patSound, bool isLeftHand)
+        {
+            int soundIndex = GetSoundIndexRaccoon(patSound);
+            float tapVolume = Mathf.Clamp(Plugin.PetVolume.Value, 0.05f, 0.5f);
+
+            VRRig rig = GorillaTagger.Instance.offlineVRRig;
+            rig.PlayHandTapLocal(soundIndex, isLeftHand, tapVolume);
+
+            if (NetworkSystem.Instance.InRoom && GorillaTagger.Instance.myVRRig is var myVRRig)
+                myVRRig.SendRPC("RPC_PlayHandTap", RpcTarget.Others, soundIndex, isLeftHand, tapVolume);
+        }
+
+        public void PlaySoundSponge(EPatSound patSound, bool isLeftHand)
+        {
+            int soundIndex = GetSoundIndexSponge(patSound);
+            float tapVolume = Mathf.Clamp(Plugin.PetVolume.Value, 0.05f, 0.5f);
+
+            VRRig rig = GorillaTagger.Instance.offlineVRRig;
+            rig.PlayHandTapLocal(soundIndex, isLeftHand, tapVolume);
+
+            if (NetworkSystem.Instance.InRoom && GorillaTagger.Instance.myVRRig is var myVRRig)
+                myVRRig.SendRPC("RPC_PlayHandTap", RpcTarget.Others, soundIndex, isLeftHand, tapVolume);
+        }
+        public int GetSoundIndexCat(EPatSound patSound)
+        {
+            return patSound switch
             {
-                activated = true;
-                bool isLeft = component.isLeftHand;
-
-                if (Plugin.UseRaccoonSounds.Value)
-                {
-                    await PetRaccoon(isLeft);
-                }
-                else if (Plugin.UseCatSounds.Value)
-                {
-                    await PetCat(isLeft);
-                }
-                else if (Plugin.UseSpongeSounds.Value)
-                {
-                    await PetSponge(isLeft);
-                }
-                else
-                {
-                    Player.PlaySoundCat(EPatSound.Default, isLeft);
-                }
-                activated = false;
-            }
+                EPatSound.Default => 159,
+                EPatSound.CatSqueeze => 235,
+                EPatSound.CatRelease => 236,
+                _ => throw new System.ArgumentOutOfRangeException(nameof(patSound))
+            };
         }
 
-        public async Task PetCat(bool isLeftHand)
+        public int GetSoundIndexRaccoon(EPatSound patSound)
         {
-            float amplitude = Mathf.Clamp(Plugin.HapticAmplitude.Value, 0f, 1f);
-            if (!Mathf.Approximately(amplitude, 0f))
-                GorillaTagger.Instance.StartVibration(isLeftHand, amplitude, GorillaTagger.Instance.tapHapticDuration);
-
-            bool isCat = Plugin.UseCatSounds.Value;
-            Player.PlaySoundCat(isCat ? EPatSound.CatSqueeze : EPatSound.Default, isLeftHand);
-
-            await Task.Delay(125);
-
-            if (isCat)
-                Player.PlaySoundCat(EPatSound.CatRelease, isLeftHand);
+            return patSound switch
+            {
+                EPatSound.Default => 159,
+                EPatSound.RaccoonSqueeze => Random.Range(274, 277),
+                EPatSound.RaccoonRelease => Random.Range(277, 283),
+                _ => throw new System.ArgumentOutOfRangeException(nameof(patSound))
+            };
         }
-
-        public async Task PetRaccoon(bool isLeftHand)
+        public int GetSoundIndexSponge(EPatSound patSound)
         {
-            float amplitude = Mathf.Clamp(Plugin.HapticAmplitude.Value, 0f, 1f);
-            if (!Mathf.Approximately(amplitude, 0f))
-                GorillaTagger.Instance.StartVibration(isLeftHand, amplitude, GorillaTagger.Instance.tapHapticDuration);
-
-            bool isRacoon = Plugin.UseRaccoonSounds.Value;
-            Player.PlaySoundRaccoon(isRacoon ? EPatSound.RaccoonSqueeze : EPatSound.Default, isLeftHand);
-
-            await Task.Delay(125);
-
-            if (isRacoon)
-                Player.PlaySoundRaccoon(EPatSound.RaccoonRelease, isLeftHand);
-        }
-
-        public async Task PetSponge(bool isLeftHand)
-        {
-            float amplitude = Mathf.Clamp(Plugin.HapticAmplitude.Value, 0f, 1f);
-            if (!Mathf.Approximately(amplitude, 0f))
-                GorillaTagger.Instance.StartVibration(isLeftHand, amplitude, GorillaTagger.Instance.tapHapticDuration);
-
-            bool isSponge = Plugin.UseSpongeSounds.Value;
-            Player.PlaySoundSponge(isSponge ? EPatSound.SpongeSqueeze : EPatSound.Default, isLeftHand);
-
-            await Task.Delay(125);
-
-            if (isSponge)
-                Player.PlaySoundSponge(EPatSound.SpongeRelease, isLeftHand);
+            return patSound switch
+            {
+                EPatSound.Default => 159,
+                EPatSound.SpongeSqueeze =>  193,
+                EPatSound.SpongeRelease =>  194,
+                _ => throw new System.ArgumentOutOfRangeException(nameof(patSound))
+            };
         }
     }
 }
-
