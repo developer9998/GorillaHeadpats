@@ -12,6 +12,7 @@ namespace GorillaHeadpats
 
         public static ConfigEntry<bool> UseCatSounds;
         public static ConfigEntry<bool> UseRaccoonSounds;
+        public static ConfigEntry<bool> UseSpongeSounds;
 
         public void Awake()
         {
@@ -20,6 +21,7 @@ namespace GorillaHeadpats
 
             UseCatSounds = Config.Bind(Constants.Name, "Use Cat Toy Sounds", false, "Whether cat toy squeek sounds should replace the regular petting");
             UseRaccoonSounds = Config.Bind(Constants.Name, "Use Raccoon Toy Sounds", false, "Whether raccoon toy squeek sounds should replace the regular petting");
+            UseSpongeSounds = Config.Bind(Constants.Name, "Use Sponge Sounds", false, "Whether sponge sounds should replace the regular petting");
 
             Harmony.CreateAndPatchAll(typeof(Plugin).Assembly, Constants.GUID);
         }
