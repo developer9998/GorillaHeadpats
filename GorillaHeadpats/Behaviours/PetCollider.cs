@@ -19,13 +19,13 @@ namespace GorillaHeadpats.Behaviours
 
                 switch (Plugin.SelectedPetType.Value)
                 {
-                    case PetType.Raccoon:
+                    case EPetType.Raccoon:
                         await Pet(isLeft, EPatSound.RaccoonSqueeze, EPatSound.RaccoonRelease);
                         break;
-                    case PetType.Cat:
+                    case EPetType.Cat:
                         await Pet(isLeft, EPatSound.CatSqueeze, EPatSound.CatRelease);
                         break;
-                    case PetType.Sponge:
+                    case EPetType.Sponge:
                         await Pet(isLeft, EPatSound.SpongeSqueeze, EPatSound.SpongeRelease);
                         break;
                     default:
