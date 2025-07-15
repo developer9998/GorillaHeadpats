@@ -7,7 +7,11 @@ namespace GorillaHeadpats.Models
     internal enum EPatSound
     {
         Default,
-        RacoonSqueeze,
-        RacoonRelease,
+        CatSqueeze,
+        CatRelease,
+        RaccoonSqueeze,
+        RaccoonRelease,
+        SpongeSqueeze,
+        SpongeRelease,
     }
 }

@@ -1,4 +1,4 @@
-﻿using GorillaHeadpats.Models;
+using GorillaHeadpats.Models;
 using Photon.Pun;
 using UnityEngine;
 
@@ -23,9 +23,9 @@ namespace GorillaHeadpats.Behaviours
             petObject.GetComponent<PetCollider>().Player = this;
         }
 
-        public void PlaySound(EPatSound patSound, bool isLeftHand)
+        public void PlayPetSound(EPatSound patSound, bool isLeftHand)
         {
-            int soundIndex = GetSoundIndex(patSound);
+            int soundIndex = Pet(patSound);
             float tapVolume = Mathf.Clamp(Plugin.PetVolume.Value, 0.05f, 0.5f);
 
             VRRig rig = GorillaTagger.Instance.offlineVRRig;
@@ -35,13 +35,16 @@ namespace GorillaHeadpats.Behaviours
                 myVRRig.SendRPC("RPC_PlayHandTap", RpcTarget.Others, soundIndex, isLeftHand, tapVolume);
         }
 
-        public int GetSoundIndex(EPatSound patSound)
+        public int Pet(EPatSound patSound)
         {
             return patSound switch
             {
-                EPatSound.Default => 159,
-                EPatSound.RacoonSqueeze => Random.Range(274, 277),
-                EPatSound.RacoonRelease => Random.Range(277, 283),
+                EPatSound.RaccoonSqueeze => Random.Range(274, 277),
+                EPatSound.RaccoonRelease => Random.Range(277, 283),
+                EPatSound.CatSqueeze => 235,
+                EPatSound.CatRelease => 236,
+                EPatSound.SpongeSqueeze => 193,
+                EPatSound.SpongeRelease => 194,
                 _ => throw new System.ArgumentOutOfRangeException(nameof(patSound))
             };
         }
