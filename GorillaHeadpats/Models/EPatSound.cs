@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,4 +15,3 @@ namespace GorillaHeadpats.Models
         SpongeRelease,
     }
 }
-//meow and raccoon i guess..
