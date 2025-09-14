@@ -1,7 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using GorillaHeadpats.Models;
 using System.Threading.Tasks;
 using UnityEngine;
-using GorillaHeadpats.Models;
 
 namespace GorillaHeadpats.Behaviours
 {
