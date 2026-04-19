@@ -26,7 +26,7 @@ namespace GorillaHeadpats.Behaviours
         public void PlaySound(EPatSound patSound, bool isLeftHand)
         {
             int soundIndex = GetSoundIndex(patSound);
-            float tapVolume = Mathf.Clamp(Plugin.PetVolume.Value, 0.05f, 0.5f);
+            float tapVolume = Mathf.Clamp(Mod.PetVolume.Value, 0.05f, 0.5f);
 
             VRRig rig = GorillaTagger.Instance.offlineVRRig;
             rig.PlayHandTapLocal(soundIndex, isLeftHand, tapVolume);

@@ -22,11 +22,11 @@ namespace GorillaHeadpats.Behaviours
 
         public async Task Pet(bool isLeftHand)
         {
-            float amplitude = Mathf.Clamp(Plugin.HapticAmplitude.Value, 0f, 1f);
+            float amplitude = Mathf.Clamp(Mod.HapticAmplitude.Value, 0f, 1f);
             if (!Mathf.Approximately(amplitude, 0f))
                 GorillaTagger.Instance.StartVibration(isLeftHand, amplitude, GorillaTagger.Instance.tapHapticDuration);
 
-            bool isRacoon = Plugin.UseRacoonSounds.Value;
+            bool isRacoon = Mod.UseRacoonSounds.Value;
             Player.PlaySound(isRacoon ? EPatSound.RacoonSqueeze : EPatSound.Default, isLeftHand);
 
             await Task.Delay(125);
